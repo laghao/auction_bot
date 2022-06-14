@@ -26,7 +26,7 @@ blockcount = rpc_conn.getblockcount()
 
 loantoken = "DUSD"
 vaultdata = 0
-blockdiff = 250
+blockdiff = 400
 Windollarlist = []
 bidingdict = []
 
@@ -65,7 +65,7 @@ while vaultdata < len(auctions):
                     ###print(f'{round(highestBidAmountConverted,2)} highest Bid price')
 
                 # Next Bid Amount
-                nextBid = highestBidAmountConverted * 1.01
+                nextBid = ((highestBidAmountConverted * 1.01)*1.01)
                 ###print(f'{round(nextBid,2)} Next Bid price')
 
                 # Loan Amount
@@ -91,10 +91,13 @@ while vaultdata < len(auctions):
                 # Number of blocks until end of Bid
                 untilliquid = liquidationheight-blockcount
                 ###print(f'{liquidationheight-blockcount} Blocks until Liquidation')
-                if "owner" in auctions[vaultdata]["batches"][indexbatch]["highestBid"]:
-                    owner = (auctions[vaultdata]["batches"][indexbatch]["highestBid"]["owner"])
-                    if owner == WALLET:
-                        owner= True
+                if "highestBid" in auctions[vaultdata]["batches"][indexbatch]:
+                    if "owner" in auctions[vaultdata]["batches"][indexbatch]["highestBid"]:
+                        owner = (auctions[vaultdata]["batches"][indexbatch]["highestBid"]["owner"])
+                        if owner == WALLET:
+                            owner= True
+                        else:
+                            owner= False
                     else:
                         owner= False
                 else:
@@ -111,7 +114,7 @@ while vaultdata < len(auctions):
 try:
     print(f'{round(max(Windollarlist),2)} Max Win price')
 except:
-    traceback.print_exc()
+    print("Red: no auctions yet")
     exit(1)
 #print(bidingdict)
 
@@ -136,9 +139,9 @@ if value > 30:
         if owner is False:
             print(f'Green = VaultId: {vault} Index: {index} windusd: {windusd} current bid: {bid}')
         else:
-            print("I am the owner")
+            print("Red: I am the owner")
     else:
-        print("Insufficient funds!")
+        print("Red: Insufficient funds!")
 
     #auctionbid = rpc_conn.placeauctionbid(vault,index,WALLET,bid)
     #print(auctionbid)

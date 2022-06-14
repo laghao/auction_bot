@@ -65,7 +65,7 @@ while vaultdata < len(auctions):
                     ### print(f'{round(highestBidAmountConverted,2)} highest Bid price')
 
                 # Next Bid Amount
-                nextBid = highestBidAmountConverted * 1.03
+                nextBid = ((highestBidAmountConverted * 1.01)*1.01)
                 ### print(f'{round(nextBid,2)} Next Bid price')
 
                 # Loan Amount
@@ -111,7 +111,7 @@ while vaultdata < len(auctions):
 try:
     print(f'{round(max(Windollarlist),2)} Max Win price')
 except:
-    traceback.print_exc()
+    print("Red: no auctions yet")
     exit(1)
 
 value = round(max(Windollarlist),2)
@@ -128,11 +128,11 @@ if value > 30:
     if ((rpc_conn.gettokenbalances({},True,True)).get("DUSD"))>x[3]:
         if owner is False:
             print(f'Green = VaultId: {vault} Index: {index} windusd: {windusd} current bid: {bid}')
-            auctionbid = rpc_conn.placeauctionbid(vault,index,WALLET,bid)
-            print(auctionbid)
+           # auctionbid = rpc_conn.placeauctionbid(vault,index,WALLET,bid)
+           # print(auctionbid)
         else:
-            print("I am the owner")
+            print("Red: I am the owner")
     else:
-        print("Insufficient funds!")
+        print("Red: Insufficient funds!")
 else:
-    print("Win below 30 Dollar")
+    print("Red: Win below 30 Dollar")
