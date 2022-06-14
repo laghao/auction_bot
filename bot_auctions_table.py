@@ -26,7 +26,7 @@ blockcount = rpc_conn.getblockcount()
 
 loantoken = "DUSD"
 vaultdata = 0
-blockdiff = 400
+blockdiff = 800
 Windollarlist = []
 bidingdict = []
 
@@ -62,10 +62,16 @@ while vaultdata < len(auctions):
                     highestBidAmount = ((auctions[vaultdata]["batches"][indexbatch]["highestBid"]["amount"]).split('@'))
                     getfixedintervalbid = rpc_conn.getfixedintervalprice(f'{highestBidAmount[1]}/USD')
                     highestBidAmountConverted = (float(getfixedintervalbid["activePrice"])) * float(highestBidAmount[0])
+                    nextBid = ((highestBidAmountConverted * 1.01)*1.01)
+                    ### print(f'{round(highestBidAmountConverted,2)} highest Bid price')
+                else:
+                    LoanAmount = (auctions[vaultdata]["batches"][indexbatch]["loan"]).split('@')
+                    getfixedLoanAmount = rpc_conn.getfixedintervalprice(f'{LoanAmount[1]}/USD')
+                    nextBid = (float(getfixedLoanAmount["activePrice"])) * float(LoanAmount[0]) * 1.05
                     ###print(f'{round(highestBidAmountConverted,2)} highest Bid price')
 
                 # Next Bid Amount
-                nextBid = ((highestBidAmountConverted * 1.01)*1.01)
+                
                 ###print(f'{round(nextBid,2)} Next Bid price')
 
                 # Loan Amount
